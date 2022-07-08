@@ -1,20 +1,32 @@
 package com.travelapp.tlkp.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.lang.NonNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
 public class User {
 	
+	
+	
+	public User() {
+	}
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private int userId;
 	
@@ -30,6 +42,10 @@ public class User {
 	@Column(name = "user_password")
 	@NonNull
 	private String userPassword;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<flight_orders> flight_orders;
 
 	public int getUserId() {
 		return userId;
@@ -64,7 +80,6 @@ public class User {
 	}
 
 	public User(int userId, String userName, String userEmail, String userPassword) {
-		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.userEmail = userEmail;
